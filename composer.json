@@ -1,0 +1,16 @@
+{
+  "name": "vda/log",
+  "type": "library",
+  "description": "high-level interfaces and implementations for logging",
+  "keywords": ["log", "logging", "psr-3"],
+  "require": {
+    "php": ">=5.3.23",
+    "psr/log": "~1.0",
+    "vda/util": "0.12.*",
+    "monolog/monolog": "1.*"
+  },
+  "autoload": {
+    "psr-4": {"Vda\\Log\\": "src/"}
+  },
+  "minimum-stability": "dev"
+}
