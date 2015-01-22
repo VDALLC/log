@@ -7,72 +7,70 @@ use Vda\Log\Exception\WrongLoggersConfigurationException;
 use Vda\Log\Logger\ILoggerBuilder;
 use Vda\Util\VarUtil;
 
-//TODO move \Vda\Log to vda-framework after testing
-
 /**
-  LogService usage
-
-  Base methods:
-    getLogger($context) - return logger by $context based on context configuration
-    setFileLoggersDirectory($logDirectory) - it's need to set directory for file logs before usage
-
-  Service try find appropriate logger in context configuration
-  Config key is a string delimited with '\' sign.
-
-  For context '\a\b\c' service will return logger:
-   1) based on config with key '\a\b\c\', '\a\b', '\a'
-   2) based on config with key \Vda\Log\ILogService::DEFAULT_CONTEXT
-   3) otherwise return nop logger which do nothing
-
-  As a context key you can use namespace string, class name string, or custom string.
-  Don't use underscore as first letter in key.
-
-  Config example:
-    [
-        '\some\custom\context'                => [
-            // b) set settings for implementation of ILoggerBuilder, which will create logger
-            [
-                'class'  => $className, // \Vda\Log\ILoggerBuilder implementation
-                'level'  => $psrLogLevel, // some \Psr\Log\LogLevel constant
-                'config' => $configParamForLoggerBuilder, // param for \Vda\Log\ILoggerBuilder constructor arg $config
-            ],
-            // e.g.
-            [
-                'class' => \Vda\Log\Logger\BrowserConsoleLoggerBuilder::class,
-                'level' => \Psr\Log\LogLevel::INFO,
-            ],
-            [
-                'class' => \Vda\Log\Logger\BrowserPageLoggerBuilder::class,
-                'level' => \Psr\Log\LogLevel::INFO,
-            ],
-            [
-                'class'  => \Vda\Log\Logger\FileLoggerBuilder::class,
-                'level'  => \Psr\Log\LogLevel::INFO,
-                'config' => ['filename' => 'debug.log'],
-            ],
-        ],
-        \Vda\Log\ILogService::DEFAULT_CONTEXT => [
-            [
-                'class'  => \Vda\Log\Logger\FileLoggerBuilder::class,
-                'level'  => \Psr\Log\LogLevel::INFO,
-                'config' => ['filename' => 'application.log'],
-            ]
-        ],
-        'default-exception-to-review'         => [
-            [
-                'class'  => \Vda\Log\Logger\FileLoggerBuilder::class,
-                'level'  => \Psr\Log\LogLevel::DEBUG,
-                'config' => ['filename' => 'exceptions-to-review.log'],
-            ],
-        ],
-        'default-console'                     => [
-            [
-                'class' => \Vda\Log\Logger\ConsoleLoggerBuilder::class,
-                'level' => \Psr\Log\LogLevel::INFO,
-            ],
-        ],
-    ];
-*/
+ * LogService usage
+ *
+ *  Base methods:
+ *    getLogger($context) - return logger by $context based on context configuration
+ *    setFileLoggersDirectory($logDirectory) - it's need to set directory for file logs before usage
+ *
+ *  Service try find appropriate logger in context configuration
+ *  Config key is a string delimited with '\' sign.
+ *
+ *  For context '\a\b\c' service will return logger:
+ *   1) based on config with key '\a\b\c\', '\a\b', '\a'
+ *   2) based on config with key \Vda\Log\ILogService::DEFAULT_CONTEXT
+ *   3) otherwise return nop logger which do nothing
+ *
+ *  As a context key you can use namespace string, class name string, or custom string.
+ *  Don't use underscore as first letter in key.
+ *
+ *  Config example:
+ *    [
+ *        '\some\custom\context'                => [
+ *            // b) set settings for implementation of ILoggerBuilder, which will create logger
+ *            [
+ *                'class'  => $className, // \Vda\Log\ILoggerBuilder implementation
+ *                'level'  => $psrLogLevel, // some \Psr\Log\LogLevel constant
+ *                'config' => $configParamForLoggerBuilder, // param for \Vda\Log\ILoggerBuilder constructor arg $config
+ *            ],
+ *            // e.g.
+ *            [
+ *                'class' => \Vda\Log\Logger\BrowserConsoleLoggerBuilder::class,
+ *                'level' => \Psr\Log\LogLevel::INFO,
+ *            ],
+ *            [
+ *                'class' => \Vda\Log\Logger\BrowserPageLoggerBuilder::class,
+ *                'level' => \Psr\Log\LogLevel::INFO,
+ *            ],
+ *            [
+ *                'class'  => \Vda\Log\Logger\FileLoggerBuilder::class,
+ *                'level'  => \Psr\Log\LogLevel::INFO,
+ *                'config' => ['filename' => 'debug.log'],
+ *            ],
+ *        ],
+ *        \Vda\Log\ILogService::DEFAULT_CONTEXT => [
+ *            [
+ *                'class'  => \Vda\Log\Logger\FileLoggerBuilder::class,
+ *                'level'  => \Psr\Log\LogLevel::INFO,
+ *                'config' => ['filename' => 'application.log'],
+ *            ]
+ *        ],
+ *        'default-exception-to-review'         => [
+ *            [
+ *                'class'  => \Vda\Log\Logger\FileLoggerBuilder::class,
+ *                'level'  => \Psr\Log\LogLevel::DEBUG,
+ *                'config' => ['filename' => 'exceptions-to-review.log'],
+ *            ],
+ *        ],
+ *        'default-console'                     => [
+ *            [
+ *                'class' => \Vda\Log\Logger\ConsoleLoggerBuilder::class,
+ *                'level' => \Psr\Log\LogLevel::INFO,
+ *            ],
+ *        ],
+ *    ];
+ */
 class LogService implements ILogService
 {
     const CONTEXT_KEY = '_context';

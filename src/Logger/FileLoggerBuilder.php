@@ -18,7 +18,7 @@ class FileLoggerBuilder extends BaseLoggerBuilder
 
         $logDirectory = $this->logService->getFileLoggersDirectory();
         if (is_null($logDirectory)) {
-            throw new \Exception('Directory for file logger is not set');//todo
+            throw new \Exception('Directory for file logger is not set');
         }
 
         $filename = VarUtil::ifEmpty($this->config['filename'], $this->getDefaultFilename());
