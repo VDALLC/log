@@ -57,6 +57,11 @@ abstract class BaseLoggerBuilder implements ILoggerBuilder
     protected function baseInit()
     {
         $this->logger = new Logger($this->context);
+
+        if (!empty($this->config['timezone'])) {
+            $this->logger->setTimezone(new \DateTimeZone($this->config['timezone']));
+        }
+
         $this->logger->pushProcessor(new ProcessIdProcessor());
         $this->logger->pushProcessor(new IntrospectionProcessor());
     }
