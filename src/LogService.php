@@ -5,7 +5,6 @@ use Vda\Log\Exception\LoggerBuildingFailedException;
 use Vda\Log\Exception\UnsupportedFileLoggerDirectoryInitializer;
 use Vda\Log\Exception\WrongLoggersConfigurationException;
 use Vda\Log\Logger\ILoggerBuilder;
-use Vda\Util\VarUtil;
 
 /**
  * LogService usage
@@ -358,13 +357,13 @@ class ContextLoggerBuilder
                     "Logger's config must to contain 'level' field");
             }
 
+            /* @var $loggerBuilder ILoggerBuilder */
             $loggerBuilder = new $loggerConfig['class'](
                 $this->logService,
                 $this->context,
                 $loggerConfig['level'],
-                VarUtil::ifEmpty($loggerConfig['config'], [])
+                empty($loggerConfig['config']) ? [] : $loggerConfig['config'])
             );
-            /* @var $loggerBuilder ILoggerBuilder */
 
             $loggersCollection->addLogger($loggerBuilder->getLogger());
         }

@@ -7,7 +7,6 @@ use Monolog\Processor\ProcessIdProcessor;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 use Vda\Log\ILogService;
-use Vda\Util\VarUtil;
 
 abstract class BaseLoggerBuilder implements ILoggerBuilder
 {
@@ -46,8 +45,8 @@ abstract class BaseLoggerBuilder implements ILoggerBuilder
         $this->logService = $logService;
         $this->context = $context;
 
-        $psrLevel = VarUtil::ifEmpty($level, LogLevel::INFO);
-        $this->monologLevel = VarUtil::ifEmpty(self::getPsrToMonologLogLevelMap()[$psrLevel], LogLevel::INFO);
+        $psrLevel = $level ?: LogLevel::INFO;
+        $this->monologLevel = self::getPsrToMonologLogLevelMap()[$psrLevel] ?: LogLevel::INFO;
 
         $this->config = $config;
 

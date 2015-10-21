@@ -3,7 +3,6 @@ namespace Vda\Log\Logger;
 
 use Monolog\Handler\StreamHandler;
 use Vda\Log\Formatter\BaseFormatter;
-use Vda\Util\VarUtil;
 
 class FileLoggerBuilder extends BaseLoggerBuilder
 {
@@ -17,11 +16,14 @@ class FileLoggerBuilder extends BaseLoggerBuilder
         $this->baseInit();
 
         $logDirectory = $this->logService->getFileLoggersDirectory();
+
         if (is_null($logDirectory)) {
             throw new \Exception('Directory for file logger is not set');
         }
 
-        $filename = VarUtil::ifEmpty($this->config['filename'], $this->getDefaultFilename());
+        $filename = empty($this->config['filename'])
+            ? $this->getDefaultFilename()
+            : $this->config['filename'];
 
         $handler = new StreamHandler("{$logDirectory}{$filename}", $this->monologLevel);
         $formatter = new BaseFormatter();

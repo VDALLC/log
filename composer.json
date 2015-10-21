@@ -12,7 +12,6 @@
   "require": {
     "php": ">=5.3.23",
     "psr/log": "~1.0",
-    "vda/util": "0.12.*",
     "monolog/monolog": "1.*"
   },
   "autoload": {
