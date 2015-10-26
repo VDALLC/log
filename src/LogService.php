@@ -362,7 +362,7 @@ class ContextLoggerBuilder
                 $this->logService,
                 $this->context,
                 $loggerConfig['level'],
-                empty($loggerConfig['config']) ? [] : $loggerConfig['config'])
+                empty($loggerConfig['config']) ? [] : $loggerConfig['config']
             );
 
             $loggersCollection->addLogger($loggerBuilder->getLogger());
