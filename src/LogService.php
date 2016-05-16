@@ -75,8 +75,6 @@ class LogService implements ILogService
     const CONTEXT_KEY = '_context';
     const CONTEXT_LOGGER_BUILDER_KEY = '_logger_builder';
 
-    private $contextsConfig;
-
     /**
      * @var string | null
      */
@@ -118,10 +116,13 @@ class LogService implements ILogService
             $this->setFileLoggersDirectory($fileLoggersDirectory);
         }
 
-        $this->contextsConfig = (array)$contextsConfig;
         $this->nopeLogger = new LoggersCollection();
 
-        $this->buildLoggersTree();
+        if (!is_array($contextsConfig) && !($contextsConfig instanceof \Traversable)) {
+            $contextsConfig = (array) $contextsConfig;
+        }
+
+        $this->buildLoggersTree($contextsConfig);
     }
 
     /**
@@ -171,13 +172,13 @@ class LogService implements ILogService
         return $this->fileLoggersDirectory;
     }
 
-    private function buildLoggersTree()
+    private function buildLoggersTree($contextsConfig)
     {
         $this->loggersTree = [
             self::CONTEXT_KEY => '',
         ];
 
-        foreach ($this->contextsConfig as $context => $loggersCollectionConfig) {
+        foreach ($contextsConfig as $context => $loggersCollectionConfig) {
             $context = trim($context, '\\');
             $contextPath = explode('\\', $context);
 
