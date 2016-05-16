@@ -1,8 +1,8 @@
 <?php
 namespace Vda\Log\Formatter;
 
-use Monolog\Formatter\NormalizerFormatter;
 use Exception;
+use Monolog\Formatter\NormalizerFormatter;
 
 class BaseFormatter extends NormalizerFormatter
 {
@@ -66,34 +66,28 @@ class BaseFormatter extends NormalizerFormatter
         return $message;
     }
 
-    protected function normalizeException(\Exception $e, $depth = 0)
+    protected function normalizeException($e)
     {
-        $class = get_class($e);
-        $message = $e->getMessage();
-        $file = $e->getFile();
-        $line = $e->getLine();
+        $exceptionMessage = '';
 
-        $previous = $e->getPrevious();
-        if (!empty($previous) && $depth < self::MAX_PREVIOUS_EXCEPTION_DEPTH) {
-            $depth++;
-            $previousException = "\nPrevious exception[{$depth}]: " . $this->normalizeException($previous, $depth);
-        } else {
-            $previousException = '';
+        while (!empty($e) && $depth++ < self::MAX_PREVIOUS_EXCEPTION_DEPTH) {
+            $class = get_class($e);
+
+            $exceptionMessage .= "
+Class: {$class}
+Message: {$e->getMessage()}
+Thrown at {$e->getFile()}:{$e->getLine()}
+Stack trace:
+{$e->getTraceAsString()}
+";
+            $e = $e->getPrevious();
+
+            if (!empty($e)) {
+                $exceptionMessage .= "\nPrevious exception[{$depth}]:";
+            }
         }
 
-        $trace = $e->getTraceAsString();
-
-        $exceptionMessage =<<<EE
-
-Class: {$class}
-Message: {$message}
-Thrown at {$file}:{$line}
-Stack trace:
-{$trace}
-{$previousException}
-EE;
         return $exceptionMessage;
-
     }
 
     protected function convertToString($data)
