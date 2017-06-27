@@ -2,4 +2,5 @@
 /.settings
 /.buildpath
 /.project
-
+/composer.lock
+/vendor
