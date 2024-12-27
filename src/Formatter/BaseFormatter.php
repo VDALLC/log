@@ -66,7 +66,7 @@ class BaseFormatter extends NormalizerFormatter
         return $message;
     }
 
-    protected function normalizeException($t, $maxDepth = 0)
+    protected function normalizeException($t, $maxDepth = self::MAX_PREVIOUS_EXCEPTION_DEPTH)
     {
         $e = $t;
         $exceptionMessage = '';
